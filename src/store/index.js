@@ -6,10 +6,19 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     username: null,
-    room: {},
-
+    listRoom: [],
+    lobby: {}
   },
   mutations: {
+    setUsername(state,payload){
+      state.username = payload
+    },
+    setListRoom(state,payload){
+      state.listRoom = payload
+    },
+    setLobby(state,payload){
+      state.lobby = payload
+    }
   },
   actions: {
   },

@@ -28,12 +28,12 @@
                           </button>
                       </div>
                       <div class="modal-body">
-                          <form @submit.prevent="submitRoom">
+                          <form>
                               <div class="form-group">
                                   <label for="roomName">Room Name</label>
                                   <input type="text" class="form-control" placeholder="Enter room name" v-model="roomName">
                               </div>
-                              <button type="submit" class="btn btn-primary">Create</button>
+                              <button @click.prevent="submitRoom" class="btn btn-primary" data-dismiss="modal">Create</button>
                               <button class="btn btn-danger ml-3" data-dismiss="modal">Close</button>
                           </form>
                       </div>
@@ -46,8 +46,8 @@
           <p>Select a room</p>
           <ul class="list-group list-group-flush">
             <li v-for="(room, i) in listRoom" :key="i" class="list-group-item">
-              {{ room }}
-              <button class="btn btn-warning float-right" v-on:click.prevent="enterRoom">Enter</button>
+              {{ room.name }}
+              <button class="btn btn-warning float-right" v-on:click.prevent="enterRoom(room._id)">Enter</button>
             </li>
           </ul>
         </div>
@@ -57,6 +57,9 @@
 </template>
 
 <script>
+import socket from '../config/socket'
+import { mapState } from 'vuex'
+
 export default {
   name: 'home',
   components: {
@@ -68,7 +71,6 @@ export default {
       roomName:null,
       rowUsername: true,
       rowRoom: false,
-      listRoom: ['room A', 'room B'],
     }
   },
   methods: {
@@ -76,16 +78,34 @@ export default {
       localStorage.setItem('username', this.username)
       this.rowUsername = false
       this.rowRoom = true
+      this.$store.commit('setUsername',this.username)
+    },
+    getAllRoom(){
+      socket.on('getRooms', data =>{
+        this.$store.commit('setListRoom', data)
+      })
+
     },
     submitRoom () {
-      let room = {
-        name: this.roomName
-      }
-      this.listRoom.push(room)
+      socket.emit('createRoom',this.roomName,this.username)
+      socket.on('connectRoom', roomData =>{
+         this.$store.commit('setLobby', roomData)
+         this.$router.push('/lobby')
+      })
     },
-    enterRoom () {
-
+    enterRoom (id) {
+      socket.emit('joinRoom',id,this.username)
+      socket.on('connectRoom', roomData =>{
+         this.$store.commit('setLobby', roomData)
+         this.$router.push('/lobby')
+      })
     }
-  }
+  },
+  mounted () {
+     this.getAllRoom()
+  },
+  computed: {
+    ...mapState(['listRoom'])
+  },
 }
 </script>
