@@ -17,8 +17,8 @@
                 <h2 class="col-sm-4 "> Players Card: {{ showCardsOnPlayersDeck }} </h2>
           </div>
           <div class="row justify-content-center">
-                  <b-button class="col-sm-4" variant="danger" v-on:click="showCard" v-show="this.listShowed.length<13 && this.playersturn">Show Card</b-button>
-                  <b-button class="col-sm-4" variant="warning" v-on:click="checkCard" v-show="this.playersturn">Hit</b-button>
+                  <b-button class="col-sm-4" variant="danger" v-on:click="showCard" v-if="this.listShowed.length<14 && this.playersturn==true">Show Card</b-button>
+                  <b-button class="col-sm-4" variant="warning" v-on:click="checkWinCondition" v-show="this.listShowed.length<14">Hit</b-button>
           </div>
       </div>
   </div>
@@ -31,7 +31,7 @@ export default {
       return{
           currentRandom: 'back',
           listShowed: [],
-          playersturn: true,
+          playersturn: false,
           cardsOnDeck: 13,
           cardsShown: 0,
           cardList: [ null,'2','3','4','5','6','7','8','9','10','Jack', 'Queen', 'King', 'As'],
@@ -55,11 +55,30 @@ export default {
       }
       
   },
+  created(){
+      if(this.listPlayer[this.count]==this.currentPlayer){
+              this.playersturn = true
+          }
+  },
+  watch:{
+      count(){
+
+      }
+  },
   methods: {
+      checkPlayersTurn(){
+          console.log(this.listPlayer[this.count])
+          if(this.listPlayer[this.count]==this.currentPlayer){
+              this.playersturn = true
+          }else if(this.listPlayer[this.count]!=this.currentPlayer){
+              console.log('masuk ga ke check turn')
+              this.playersturn = false
+          }
+      },
       resetTurn(){
           let playersCount = this.listPlayer.length
           if(this.count===playersCount){
-
+              this.count = 0
           }
       },
       decrementCard(){
@@ -80,7 +99,7 @@ export default {
               this.listShowed.push(this.currentRandom)
           }
       },
-      checkCard(){
+      checkWinCondition(){
 
       },
       getImg(pic){
@@ -91,6 +110,8 @@ export default {
           this.decrementCard()
           this.incrementCard()
           this.increaseCount()
+          this.resetTurn()
+          this.checkPlayersTurn()
           
       }
   }
