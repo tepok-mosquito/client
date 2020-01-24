@@ -89,6 +89,7 @@ export default {
       roomName:null,
       rowUsername: true,
       rowRoom: false
+
     }
   },
   methods: {

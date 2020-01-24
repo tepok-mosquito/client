@@ -7,7 +7,8 @@ export default new Vuex.Store({
   state: {
     username: null,
     listRoom: [],
-    lobby: {}
+    lobby: {},
+    dataArena: {}
   },
   mutations: {
     setUsername(state,payload){
@@ -18,9 +19,13 @@ export default new Vuex.Store({
     },
     setLobby(state,payload){
       state.lobby = payload
-    }
+    },
+    setDataArena(state,payload){
+      state.dataArena = payload
+      }
   },
   actions: {
+    
   },
   modules: {
   }

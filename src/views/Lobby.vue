@@ -17,7 +17,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <router-link to="/" class="btn btn-username btn-block mt-5">Enter</router-link>
+                       <button @click.prevent="startArena" class="btn btn-warning btn-block mt-5">Enter</button>
                     </div>
                 </div>
             </div>
@@ -27,15 +27,21 @@
 
 <script>
 import { mapState } from 'vuex'
+import socket from '../config/socket'
 export default {
     name: 'lobby',
     computed: {
-        ...mapState(['lobby'])
+        ...mapState(['lobby','username'])
     },
-    data() {
-        return {
-            listPlayer: ['Player A', 'Player B', 'Player C'],
-            roomName: 'Room A'
+    mounted() {
+        socket.on('setDataArena', data => {
+              this.$store.commit('setDataArena', data)
+        })
+    },
+    methods: {
+        startArena(){
+            socket.emit('joinArena', this.lobby)
+            this.$router.push('/arena')
         }
     }
 }
