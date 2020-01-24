@@ -79,7 +79,6 @@ export default {
       showCardCalled(){
         return this.dataArena.cardList[this.dataArena.cardsShown]
       }
-      
   },
   mounted(){
         socket.on('setDataArena', data => {
@@ -96,10 +95,13 @@ export default {
   },
   methods: {
       checkPlayersDeck(){
-          if(this.showCardsOnPlayersDeck==0){
-            //   this.winStatus = true
+            if(this.showCardsOnPlayersDeck==0){
+              this.winStatus = true
               //kalau winstatus true langsung aja yg lain kalah
-        }
+            }else if(this.points==5){
+                this.winStatus = true
+                //kalau point player udah 5
+            }
       },
       checkPlayersTurn(){
           if(this.dataArena.listPlayer[this.dataArena.count]==this.username){
