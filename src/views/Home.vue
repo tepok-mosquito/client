@@ -92,6 +92,12 @@ export default {
 
     }
   },
+  created(){
+      socket.on('connectRoom', roomData =>{
+         this.$store.commit('setLobby', roomData)
+         this.$router.push('/lobby')
+      })
+  },
   methods: {
     submitUsername () {
       localStorage.setItem('username', this.username)
@@ -114,10 +120,6 @@ export default {
     },
     enterRoom (id) {
       socket.emit('joinRoom',id,this.username)
-      socket.on('connectRoom', roomData =>{
-         this.$store.commit('setLobby', roomData)
-         this.$router.push('/lobby')
-      })
     }
   },
   mounted () {
