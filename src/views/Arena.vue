@@ -1,36 +1,4 @@
 <template>
-  <!-- <div class="layout">
-      <div class="container fluid">
-          <div class="row">
-              <div class="col-md-6 mx-auto"><h2>Tepok Nyamuk</h2></div>
-          </div>
-          <div class="row">
-              <h3 class="col-md-6 mx-auto" v-show="showCardCalled!==null">Hit: {{ showCardCalled }}</h3>
-          </div>
-          <div class="row">
-              <h4 class="col-sm-6 mx-auto">Cards On Deck: {{ showCardsShown }}</h4>
-              <div class="col-sm-6 arena mx-auto">
-                    <img class="card" :src="getImg(showThisPicture)" alt="">
-              </div>
-          </div>
-          <div class="row">
-                <h2 class="col-sm-4 "> Players Card: {{ showCardsOnPlayersDeck }} </h2>
-                <h4 class="col-sm-4 "> {{ showPoints }} </h4>
-          </div>
-          <div class="row justify-content-center">
-                  <b-button class="col-sm-4" variant="danger" v-on:click="showCard" v-if="dataArena.listShowed.length<14 && this.playersturn==true">Show Card</b-button>
-                  <b-button class="col-sm-4" variant="warning" v-on:click="checkWinCondition" v-show="dataArena.listShowed.length<14">Hit</b-button>
-                  <!-- <b-button class="col-sm-4" variant="success" v-on:click="showTheWinner" >Button</b-button> -->
-                  <!-- {{ pointsList }} -->
-                    <b-button v-b-modal.modal-1 v-if="dataArena.listShowed.length>=13">Show Winner</b-button>
-                    <b-modal id="modal-1" title="BootstrapVue" hide-footer>
-                        <p class="my-4" v-if="!pointsList[0]">It's a tie!!</p>
-                        <p class="my-4" v-else>Congrats! The Winner is {{ pointsList[0] }}</p>
-                    </b-modal>
-          </div>
-      </div>
-  </div> -->
-  
 <div class="board">
   <div class="title">
     <h1>Tepok Nyamuk</h1>
@@ -51,6 +19,11 @@
   <div class="button">
     <a class="btn" href="#" v-on:click="showCard" v-if="dataArena.listShowed.length<14 && this.playersturn==true">show card</a>
     <a class="btn" href="#" v-on:click="checkWinCondition" v-show="dataArena.listShowed.length<14">hit</a>
+    <b-button v-b-modal.modal-1 v-if="dataArena.listShowed.length>=13">Show Winner</b-button>
+        <b-modal id="modal-1" title="BootstrapVue" hide-footer>
+            <p class="my-4" v-if="!pointsList[0]">It's a tie!!</p>
+            <p class="my-4" v-else>Congrats! The Winner is {{ pointsList[0] }}</p>
+        </b-modal>
   </div>
 </div>
 </template>
