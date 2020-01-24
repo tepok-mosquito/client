@@ -20,6 +20,13 @@
           <div class="row justify-content-center">
                   <b-button class="col-sm-4" variant="danger" v-on:click="showCard" v-if="dataArena.listShowed.length<14 && this.playersturn==true">Show Card</b-button>
                   <b-button class="col-sm-4" variant="warning" v-on:click="checkWinCondition" v-show="dataArena.listShowed.length<14">Hit</b-button>
+                  <!-- <b-button class="col-sm-4" variant="success" v-on:click="showTheWinner" >Button</b-button> -->
+                  <!-- {{ pointsList }} -->
+                    <b-button v-b-modal.modal-1 v-if="dataArena.listShowed.length>=13">Show Winner</b-button>
+                    <b-modal id="modal-1" title="BootstrapVue" hide-footer>
+                        <p class="my-4" v-if="!pointsList[0]">It's a tie!!</p>
+                        <p class="my-4" v-else>Congrats! The Winner is {{ pointsList[0] }}</p>
+                    </b-modal>
           </div>
       </div>
   </div> -->
@@ -59,11 +66,10 @@ export default {
           playersturn: false,
           points: 0,
           flag: false
-   
       }
   },
   computed:{
-      ...mapState(['username', 'lobby', 'dataArena']),
+      ...mapState(['username', 'lobby', 'dataArena', 'pointsList']),
       showPoints(){
           return `Player's Points: ${this.points}`
       },
@@ -87,6 +93,10 @@ export default {
               this.resetTurn()
               this.$store.commit('setDataArena', data)
         })
+        socket.on('setwinner', data=>{
+            console.log('masuk socket game winner')
+            this.$store.commit('setWinner', data)
+        })
       },
   created(){     
       if(this.dataArena.listPlayer[this.dataArena.count]==this.username){
@@ -95,12 +105,13 @@ export default {
   },
   methods: {
       checkPlayersDeck(){
-            if(this.showCardsOnPlayersDeck==0){
-              this.winStatus = true
+          console.log('masuk check players deck 1', this.showCardsOnPlayersDeck)
+            if(this.showCardsOnPlayersDeck<=0 || this.showCardsOnPlayersDeck==0){
+                console.log('masuk check players deck', this.username, this.points)
+                socket.emit('gamePlay', this.dataArena)
+                socket.emit('totalPoints', [this.username,this.points], this.dataArena)
+                console.log(this.pointsList, 'points list')
               //kalau winstatus true langsung aja yg lain kalah
-            }else if(this.points==5){
-                this.winStatus = true
-                //kalau point player udah 5
             }
       },
       checkPlayersTurn(){
@@ -131,7 +142,7 @@ export default {
           }else{
               this.dataArena.listShowed.push(this.dataArena.currentRandom)
           }
-          this.decrementAndIncrement()
+          
       },
       checkWinCondition(){
           console.log(this.showCardCalled ,this.showThisPicture)
@@ -147,12 +158,15 @@ export default {
           return require('../assets/sementara/'+ this.showThisPicture +'.png')
       },
       showCard(){
-        this.getRandom()
+          if(this.dataArena.listShowed.length<13){
+              this.getRandom()
+          }
+        this.decrementAndIncrement()
         this.checkPlayersTurn()
         this.checkPlayersDeck()
         this.resetTurn()
      
-            socket.emit('gamePlay', this.dataArena)
+        socket.emit('gamePlay', this.dataArena)
         
       }
   }

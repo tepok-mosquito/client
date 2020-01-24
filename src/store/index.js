@@ -8,7 +8,8 @@ export default new Vuex.Store({
     username: null,
     listRoom: [],
     lobby: {},
-    dataArena: {}
+    dataArena: {},
+    pointsList: []
   },
   mutations: {
     setUsername(state,payload){
@@ -22,7 +23,19 @@ export default new Vuex.Store({
     },
     setDataArena(state,payload){
       state.dataArena = payload
-      }
+      },
+    setWinner(state, payload){
+      let winner =  null
+      let winnerPoint = 0
+      console.log(payload,'ini payload')
+      payload.forEach(element => {
+        if(element[1] > winnerPoint){
+          winner = element
+        }
+      }); 
+      console.log(winner, 'the winner')
+      state.pointsList = winner
+    }
   },
   actions: {
     
