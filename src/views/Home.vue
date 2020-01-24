@@ -1,17 +1,30 @@
 <template >
   <div class="home">
-    <div class="container">
-      <div class="row justify-content-center mt-5" id="row-username" v-if="rowUsername">
+    <div class="container-fluid">
+      <div class="row" id="row-username" v-if="rowUsername">
         <div class="col-5">
           <form @submit.prevent="submitUsername">
-            <div class="form-group">
-                <input type="text" class="form-control" placeholder="Enter your username" v-model="username">
+            <h2 class="player-title">PLAYER NAME</h2>
+            <div class="form-group row justify-content-end">
+                <div class="col-8">
+                  <input type="text" class="form-control" placeholder="" v-model="username">
+                </div>
+                <div class="col-3">
+                  <button type="submit" class="btn btn-success btn-block">Ready</button>
+                </div>
             </div>
-            <button type="submit" class="btn btn-success btn-block mt-4">Ready to Play!</button>
           </form>
         </div>
       </div>
-      <div class="row justify-content-center mt-5" id="row-room" v-if="rowRoom">
+      <div class="row mt-5" id="platform" v-if="rowUsername">
+        <div class="col">
+          <p class="title">PLATFORM: <span class="pl-3">WEB BROWSER</span></p>
+          <hr class="hr">
+          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+            Lorem Ipsum has been the industry's<br>standard dummy text ever since the 1500s</p>
+        </div>
+      </div>
+      <div class="row justify-content-center" id="row-room" v-if="rowRoom">
         <div class="col-4">
           <h3 class="text-center">Tepok Mosquito</h3>
           <button type="button" class="btn btn-primary btn-block mt-3" data-toggle="modal" data-target="#roomModal">
@@ -109,3 +122,34 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.home {
+  background-color: #edd9e0;
+  background-image: url('https://static.playoverwatch.com/img/ow-fractal-bg-a5992cc2ba.jpg');
+  background-size: cover;
+  min-height: 800px;
+  color: #333;
+}
+.player-title {
+  font-family: 'Bangers', cursive;
+  font-weight: 400;
+  font-size: 2.5rem;
+  letter-spacing: .1rem;
+  padding-left: 55px;
+}
+#row-username {
+  padding-top: 150px
+}
+#platform {
+  padding-left: 55px;
+  padding-right: 55px;
+  font-family: 'Roboto', sans-serif;
+}
+hr {
+  border-top: 10px solid rgba(0, 0, 0, 0.3);
+}
+#platform .title {
+  font-weight: 700
+}
+</style>

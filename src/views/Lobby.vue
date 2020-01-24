@@ -1,8 +1,18 @@
 <template>
-    <div>
-        <h1>{{lobby.name}}</h1>
-        <p>{{lobby.players}}</p>
-        <button class="btn btn-warning float-right" v-on:click.prevent="startArena">Enter</button>
+    <div class="lobby">
+        <div class="container">
+            <div class="row justify-content-center mt-5">
+                <div class="col-5">
+                    <h3>{{ lobby.name }}</h3>
+                    <ul class="list-group list-group-flush">
+                        <li v-for="(player, i) in lobby.players" :key="i" class="list-group-item">
+                            {{ player }}
+                        </li>
+                    </ul>
+                    <button @click.prevent="startArena" class="btn btn-warning btn-block mt-5">Enter</button>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -30,53 +40,4 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.min-height {
-    min-height: 500px;
-}
-#billboard .bb-name {
-    color: #fff;
-    font-size: 36px;
-    text-align: center;
-    font-weight: 400;
-    min-height: 100px;
-    max-height: 100px;
-    background-image: url('https://images.pexels.com/photos/2505693/pexels-photo-2505693.jpeg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    line-height: 100px;
-    border-radius: 8px;
-}
-.room-btn {
-    font-weight: 400;
-    color: #fff;
-    text-align: center;
-    vertical-align: middle;
-    cursor: pointer;
-    background-image: url('https://images.pexels.com/photos/2505693/pexels-photo-2505693.jpeg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    font-size: 1rem;
-    border-radius: 8px;
-    min-height: 400px;
-    max-height: 400px;
-    width: 100%;
-}
-.room-title {
-    border: 1px solid #fff;
-    padding: 5px 25px;
-    text-transform: uppercase;
-    font-weight: 400;
-}
-
-.bg-lobby {
-    background-image: url('https://images.pexels.com/photos/532563/pexels-photo-532563.jpeg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-}
-.list-room {
-    color: #fff;
-}
 </style>

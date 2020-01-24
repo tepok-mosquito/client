@@ -21,7 +21,6 @@ export default new Vuex.Store({
       state.lobby = payload
     },
     setDataArena(state,payload){
-      console.log(payload)
       state.dataArena = payload
       }
   },
