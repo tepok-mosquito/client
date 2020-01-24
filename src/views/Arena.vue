@@ -15,6 +15,7 @@
           </div>
           <div class="row">
                 <h2 class="col-sm-4 "> Players Card: {{ showCardsOnPlayersDeck }} </h2>
+                <h4 class="col-sm-4 "> {{ showPoints }} </h4>
           </div>
           <div class="row justify-content-center">
                   <b-button class="col-sm-4" variant="danger" v-on:click="showCard" v-if="this.listShowed.length<14 && this.playersturn==true">Show Card</b-button>
@@ -38,9 +39,14 @@ export default {
           listPlayer: ['sera', 'amel'],
           currentPlayer: 'sera',
           count: 0,
+          points: 0,
+          winStatus: false
       }
   },
   computed:{
+      showPoints(){
+          return `Player's Points: ${this.points}`
+      },
       showThisPicture(){
         return `${this.currentRandom}`
       },
@@ -58,20 +64,21 @@ export default {
   created(){
       if(this.listPlayer[this.count]==this.currentPlayer){
               this.playersturn = true
-          }
-  },
-  watch:{
-      count(){
-
-      }
+        }
   },
   methods: {
+      checkPlayersDeck(){
+          if(this.showCardsOnPlayersDeck==0){
+              this.winStatus = true
+              //kalau winstatus true langsung aja yg lain kalah
+        }
+      },
       checkPlayersTurn(){
-          console.log(this.listPlayer[this.count])
+        //   console.log(this.listPlayer[this.count])
           if(this.listPlayer[this.count]==this.currentPlayer){
               this.playersturn = true
           }else if(this.listPlayer[this.count]!=this.currentPlayer){
-              console.log('masuk ga ke check turn')
+            //   console.log('masuk ga ke check turn')
               this.playersturn = false
           }
       },
@@ -81,13 +88,9 @@ export default {
               this.count = 0
           }
       },
-      decrementCard(){
+      decrementAndIncrement(){
         this.cardsOnDeck-=1
-      },
-      incrementCard(){
         this.cardsShown+=1
-      },
-      increaseCount(){
         this.count++
       },
       getRandom(){
@@ -100,19 +103,24 @@ export default {
           }
       },
       checkWinCondition(){
-
+          if(this.showCardCalled==this.showThisPicture){
+              this.points+=1
+              //harusnya kartu yang ditengah dibagi kelawan
+          }else if(this.showCardCalled!=this.showThisPicture){
+              //harusnya kartu yang ditengah dikasih ke yg salah
+              this.points-=1
+          }
+          
       },
       getImg(pic){
           return require('../assets/sementara/'+ this.showThisPicture +'.png')
       },
       showCard(){
-          this.getRandom()
-          this.decrementCard()
-          this.incrementCard()
-          this.increaseCount()
-          this.resetTurn()
-          this.checkPlayersTurn()
-          
+        this.getRandom()
+        this.decrementAndIncrement()
+        // this.resetTurn()
+        // this.checkPlayersTurn()
+        this.checkPlayersDeck()
       }
   }
 
