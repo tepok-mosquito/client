@@ -20,14 +20,19 @@
         <div class="col animated fadeInDown delay-1s">
           <p class="title">PLATFORM: <span class="pl-3">WEB BROWSER</span></p>
           <hr class="hr">
-          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-            Lorem Ipsum has been the industry's<br>standard dummy text ever since the 1500s</p>
+          <p>There are so many expressions that we commonly use in our everyday conversations that come from the ordinary deck of playing cards. 
+            <br>Have you ever heard someone say that they don’t want to “get lost in the shuffle” or ask the question,
+            <br>“What’s the deal anyway?”
+            Most of us have heard people say, “It’s just not in the cards for me to …”
+            <br>when things didn’t work out the way they planned.
+            When someone seems to be in charge of a situation, people say that they are “holding all the cards.”
+          </p>
         </div>
       </div>
       <div class="row justify-content-center pt-5" id="row-room" v-if="rowRoom">
         <div class="col-4">
           <p class="select-room animated fadeInDown delay-1s">Create Room</p>
-          <button type="button" class="btn btn-username btn-block mt-3" data-toggle="modal" data-target="#roomModal">
+          <button type="button" class="btn btn-username btn-block mt-3 animated fadeIn delay-2s" data-toggle="modal" data-target="#roomModal">
             Create
           </button>
 
@@ -59,8 +64,7 @@
           <p class="select-room">Available Room</p>
           <ul class="list-group list-group-flush">
             <li v-for="(room, i) in listRoom" :key="i" class="list-group-item">
-              <span class="room-title">Room A</span>
-              <!-- {{ room.name }} -->
+              <span class="room-title">{{ room.name }}</span>
               <button class="btn btn-username float-right" v-on:click.prevent="enterRoom(room._id)">Enter</button>
             </li>
           </ul>
@@ -84,8 +88,7 @@ export default {
       username: null,
       roomName:null,
       rowUsername: true,
-      rowRoom: false,
-      listRoom: ['room A', 'room B']
+      rowRoom: false
     }
   },
   methods: {
@@ -117,7 +120,7 @@ export default {
     }
   },
   mounted () {
-    //  this.getAllRoom()
+     this.getAllRoom()
   },
   computed: {
     ...mapState(['listRoom'])
