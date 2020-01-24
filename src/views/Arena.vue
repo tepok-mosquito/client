@@ -1,29 +1,4 @@
 <template>
-  <!-- <div class="layout">
-      <div class="container fluid">
-          <div class="row">
-              <div class="col-md-6 mx-auto"><h2>Tepok Nyamuk</h2></div>
-          </div>
-          <div class="row">
-              <h3 class="col-md-6 mx-auto" v-show="showCardCalled!==null">Hit: {{ showCardCalled }}</h3>
-          </div>
-          <div class="row">
-              <h4 class="col-sm-6 mx-auto">Cards On Deck: {{ showCardsShown }}</h4>
-              <div class="col-sm-6 arena mx-auto">
-                    <img class="card" :src="getImg(showThisPicture)" alt="">
-              </div>
-          </div>
-          <div class="row">
-                <h2 class="col-sm-4 "> Players Card: {{ showCardsOnPlayersDeck }} </h2>
-                <h4 class="col-sm-4 "> {{ showPoints }} </h4>
-          </div>
-          <div class="row justify-content-center">
-                  <b-button class="col-sm-4" variant="danger" v-on:click="showCard" v-if="dataArena.listShowed.length<14 && this.playersturn==true">Show Card</b-button>
-                  <b-button class="col-sm-4" variant="warning" v-on:click="checkWinCondition" v-show="dataArena.listShowed.length<14">Hit</b-button>
-          </div>
-      </div>
-  </div> -->
-  
 <div class="board">
   <div class="title">
     <h1>Tepok Nyamuk</h1>
@@ -44,6 +19,11 @@
   <div class="button">
     <a class="btn" href="#" v-on:click="showCard" v-if="dataArena.listShowed.length<14 && this.playersturn==true">show card</a>
     <a class="btn" href="#" v-on:click="checkWinCondition" v-show="dataArena.listShowed.length<14">hit</a>
+    <b-button v-b-modal.modal-1 v-if="dataArena.listShowed.length>=13">Show Winner</b-button>
+        <b-modal id="modal-1" title="BootstrapVue" hide-footer>
+            <p class="my-4" v-if="!pointsList[0]">It's a tie!!</p>
+            <p class="my-4" v-else>Congrats! The Winner is {{ pointsList[0] }}</p>
+        </b-modal>
   </div>
 </div>
 </template>
@@ -59,11 +39,10 @@ export default {
           playersturn: false,
           points: 0,
           flag: false
-   
       }
   },
   computed:{
-      ...mapState(['username', 'lobby', 'dataArena']),
+      ...mapState(['username', 'lobby', 'dataArena', 'pointsList']),
       showPoints(){
           return `Player's Points: ${this.points}`
       },
@@ -79,7 +58,6 @@ export default {
       showCardCalled(){
         return this.dataArena.cardList[this.dataArena.cardsShown]
       }
-      
   },
   mounted(){
         socket.on('setDataArena', data => {
@@ -87,6 +65,10 @@ export default {
               this.checkPlayersTurn()
               this.resetTurn()
               this.$store.commit('setDataArena', data)
+        })
+        socket.on('setwinner', data=>{
+            console.log('masuk socket game winner')
+            this.$store.commit('setWinner', data)
         })
       },
   created(){     
@@ -96,10 +78,14 @@ export default {
   },
   methods: {
       checkPlayersDeck(){
-          if(this.showCardsOnPlayersDeck==0){
-            //   this.winStatus = true
+          console.log('masuk check players deck 1', this.showCardsOnPlayersDeck)
+            if(this.showCardsOnPlayersDeck<=0 || this.showCardsOnPlayersDeck==0){
+                console.log('masuk check players deck', this.username, this.points)
+                socket.emit('gamePlay', this.dataArena)
+                socket.emit('totalPoints', [this.username,this.points], this.dataArena)
+                console.log(this.pointsList, 'points list')
               //kalau winstatus true langsung aja yg lain kalah
-        }
+            }
       },
       checkPlayersTurn(){
           if(this.dataArena.listPlayer[this.dataArena.count]==this.username){
@@ -129,7 +115,7 @@ export default {
           }else{
               this.dataArena.listShowed.push(this.dataArena.currentRandom)
           }
-          this.decrementAndIncrement()
+          
       },
       checkWinCondition(){
           console.log(this.showCardCalled ,this.showThisPicture)
@@ -145,12 +131,15 @@ export default {
           return require('../assets/sementara/'+ this.showThisPicture +'.png')
       },
       showCard(){
-        this.getRandom()
+          if(this.dataArena.listShowed.length<13){
+              this.getRandom()
+          }
+        this.decrementAndIncrement()
         this.checkPlayersTurn()
         this.checkPlayersDeck()
         this.resetTurn()
      
-            socket.emit('gamePlay', this.dataArena)
+        socket.emit('gamePlay', this.dataArena)
         
       }
   }
