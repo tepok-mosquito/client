@@ -1,5 +1,9 @@
 <template >
   <div class="home">
+        <audio autoplay>
+      <source src="@/assets/musicAsik.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
     <div class="container-fluid">
       <div class="row" id="row-username" v-if="rowUsername">
         <div class="col-5 animated fadeInRight delay-1s">
