@@ -2,15 +2,28 @@
     <div>
         <h1>{{lobby.name}}</h1>
         <p>{{lobby.players}}</p>
+        <button class="btn btn-warning float-right" v-on:click.prevent="startArena">Enter</button>
     </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import socket from '../config/socket'
 export default {
     name: 'lobby',
     computed: {
-        ...mapState(['lobby'])
+        ...mapState(['lobby','username'])
+    },
+    mounted() {
+        socket.on('setDataArena', data => {
+              this.$store.commit('setDataArena', data)
+        })
+    },
+    methods: {
+        startArena(){
+            socket.emit('joinArena', this.lobby)
+            this.$router.push('/arena')
+        }
     }
 }
 </script>
