@@ -94,7 +94,6 @@ export default {
           this.flag = true
       },
       decrementAndIncrement(){
-          console.log('increament')
         this.dataArena.cardsOnDeck-=1
         this.dataArena.cardsShown+=1
         this.dataArena.count++
@@ -110,14 +109,14 @@ export default {
           this.decrementAndIncrement()
       },
       checkWinCondition(){
-          if(this.dataArena.showCardCalled==this.dataArena.showThisPicture){
+          console.log(this.showCardCalled ,this.showThisPicture)
+          if(this.showCardCalled==this.showThisPicture){
               this.points+=1
               //harusnya kartu yang ditengah dibagi kelawan
-          }else if(this.dataArena.showCardCalled!=this.dataArena.showThisPicture){
+          }else if(this.showCardCalled !=this.showThisPicture){
               //harusnya kartu yang ditengah dikasih ke yg salah
               this.points-=1
           }
-          
       },
       getImg(pic){
           return require('../assets/sementara/'+ this.showThisPicture +'.png')
